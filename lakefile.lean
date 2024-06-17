@@ -10,3 +10,6 @@ lean_lib «LeanChristina» where
 @[default_target]
 lean_exe «lean-christina» where
   root := `Main
+
+require mathlib from git
+  "https://github.com/leanprover-community/mathlib4"
