@@ -1,7 +1,8 @@
 import Mathlib
 import Mathlib.Data.Opposite
+import Mathlib.CategoryTheory.Product
 
-open CategoryTheory CategoryTheory.Category CategoryTheory.Limits Opposite
+open CategoryTheory CategoryTheory.Category CategoryTheory.Limits Opposite CategoryTheory.Monoidal
 
 variable {A B C : Type} [Category A] [Category B]
 
@@ -10,16 +11,12 @@ structure RatCat (F : A × Bᵒᵖ ⥤ A) where
   under : B
 
 abbrev CategoryTheory.Functor.obj₂ (F : A × B ⥤ A) : A → B → A :=
-  λ α β => (F.obj α).obj β
+  λ α β => (F.obj ⟨α, β⟩)
 
-#check NatTrans
-
-def CategoryTheory.Functor.map₂ (F : A ⥤ B ⥤ A) {Xl Xr : A} {Yl Yr : B}
+def CategoryTheory.Functor.map₂ (F : A × B ⥤ A) {Xl Xr : A} {Yl Yr : B}
   (f : Xl ⟶ Xr)
   (g : Yl ⟶ Yr)
-  : F.obj₂ Xl Yl ⟶ F.obj₂ Xr Yr := by
-   simp [CategoryTheory.Functor.obj₂]
-   have := (F.map f) ≫ g
+  : F.obj₂ Xl Yl ⟶ F.obj₂ Xr Yr := F.map (λ p => f ◁ p ▷ g )
 
 
 def RatCat.mkHom {P : A ⥤ Bᵒᵖ ⥤ A} (σ τ : RatCat P) : Type :=
